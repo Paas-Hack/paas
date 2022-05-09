@@ -34,14 +34,6 @@ public class VoiceService {
                     = Central.createSynthesizer(
                     new SynthesizerModeDesc(Locale.US));
 
-//            synthesizer.allocate();
-//            synthesizer.resume();
-//            synthesizer.speakPlainText(nameToPrononuce, null);
-//            synthesizer.waitEngineState(
-//                    Synthesizer.QUEUE_EMPTY);
-//
-//            // Deallocate the Synthesizer.
-//            synthesizer.deallocate();
             convertToWav(nameToPrononuce);
             byteArray = convertToBase64();
         } catch (Exception e) {
