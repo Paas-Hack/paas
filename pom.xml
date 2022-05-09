@@ -12,7 +12,7 @@
 	<artifactId>pass</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>pass</name>
-	<description>Name Prononucation</description>
+	<description>Name Pronunciation</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -32,10 +32,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
@@ -44,6 +40,10 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>

@@ -53,6 +53,8 @@ public class VoiceService {
     public void convertToWav(String word) {
         VoiceManager voiceManager = VoiceManager.getInstance();
         Voice helloVoice = voiceManager.getVoice("kevin16");
+        helloVoice.setDurationStretch((float)(2));
+        helloVoice.setStyle("casual");
         helloVoice.allocate();
         AudioPlayer audioPlayer = new SingleFileAudioPlayer("output", AudioFileFormat.Type.WAVE);
         helloVoice.setAudioPlayer(audioPlayer);
