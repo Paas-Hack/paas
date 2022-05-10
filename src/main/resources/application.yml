@@ -1,12 +1,14 @@
-
-server:
-  servlet:
-    context-path: /paas
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/passdb
+    password: pass7799
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: 'true'
+    hibernate:
+      ddl-auto: update
