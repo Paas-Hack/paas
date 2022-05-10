@@ -41,6 +41,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.11.0</version>
@@ -49,6 +54,76 @@
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.15</version>
+		</dependency>
+		<dependency>
+			<groupId>jsapi</groupId>
+			<artifactId>jsapi</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/jsapi.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cmu_time_awb</groupId>
+			<artifactId>cmu_time_awb</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/cmu_time_awb.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cmu_us_kal</groupId>
+			<artifactId>cmu_us_kal</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/cmu_us_kal.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cmudict04</groupId>
+			<artifactId>cmudict04</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/cmudict04.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cmulex</groupId>
+			<artifactId>cmulex</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/cmulex.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>cmutimelex</groupId>
+			<artifactId>cmutimelex</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/cmutimelex.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>en_us</groupId>
+			<artifactId>en_us</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/en_us.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>freetts</groupId>
+			<artifactId>freetts</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/freetts.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>freetts-jsapi10</groupId>
+			<artifactId>freetts-jsapi10</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/freetts-jsapi10.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>mbrola</groupId>
+			<artifactId>mbrola</artifactId>
+			<scope>system</scope>
+			<version>1.0</version>
+			<systemPath>${basedir}/exLibs/mbrola.jar</systemPath>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>com</groupId>-->
@@ -67,5 +142,7 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
 
 </project>
