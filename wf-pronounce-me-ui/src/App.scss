@@ -1,0 +1,172 @@
+$col-red: #d71e28;
+$col-white: #fff;
+$col-black: #000;
+$col-yellow: rgb(241, 240, 240);
+
+#root {
+  height: 100%;
+}
+.App {
+  text-align: center;
+  height: 100%;
+}
+.bodyContainer{
+  height:calc(100% - 60px);
+  .scrollContainer{
+    overflow: auto;
+    min-height:100%;
+  }
+}
+
+/* Header CSS **/
+.wfLogoStripParent{
+  clear: left;
+  margin: 0;
+  background-color: #d71e28;
+  border-bottom: 4px solid #fcc60a;
+  height: 60px;
+  .wfLogoStripChild{
+    position: relative;
+    height: 60px;
+    margin: 0 auto;
+    #brand{
+      position: absolute;
+      height: 35px;
+      top: 9px;
+      left: 30px;
+      overflow: hidden;
+    }
+  }
+}
+
+
+
+
+
+.c9 {
+  margin: 0;
+  padding: 20px 0px 10px 0px;
+  background-color: $col-white;/*#f4f0ed;*/
+  background-image: none!important;
+  border-top: 1px solid #b5adad;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height:103px;
+  .c9content{
+    margin: 0 auto;
+    width:50%;
+    ul {
+      list-style: none;
+      margin: 0 0 0 -14px;
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-evenly;
+      li{
+        float: left;
+        width: auto;
+        margin: 0 18px 16px -3px;
+        padding: 0 0 0 18px;
+        line-height: 1em;
+        border-left: 1px solid #666;
+        white-space: nowrap;
+        &.liFirst{
+          border-left: none;
+        }
+        a {
+          color: #3b3331;
+          text-decoration: none;
+          font-size: 12px;
+          line-height: 1.2em;
+        }
+      }
+    } 
+  }
+}
+
+.homePageContent{
+  background-color: rgb(241, 240, 240);
+  margin-top:100px;
+  margin-bottom:10px;
+  .pronounceNamesImg{
+    width: 25%;
+    margin:auto;
+    img {
+      width:100%;
+    }
+  }
+}
+
+
+.recordingContainer{
+  width: 50%;
+  margin: auto;
+  ._1ceqH {
+    ._2N9dq{
+      span{
+        font-size:20px;
+      }
+    }
+    ._1Yplu{
+      margin:10px 30px;
+      ._1Pz2d{
+        background-color: $col-red;
+        border: 1px solid $col-red;
+      }
+      ._2gd2_{
+        background-color: $col-white;
+        color:$col-black;
+      }
+    }
+    ._dt3-T{
+      background-color: $col-white;
+      background: $col-white;
+      color:$col-black !important;
+      ._1lB9c{
+        background-color: rgb(180, 180, 180);
+        color:$col-black !important;
+      }
+    }
+    ._f2DT8 *{
+      color:$col-black !important;
+    }
+    ._3bC73 {
+      ._1YOWG {
+        bottom:85px;
+        ._eV_dK{
+          color:$col-black !important;
+        }
+      }
+    }    
+    ._1dpop{
+      background: $col-red;
+    }
+  } 
+}
+
+
+
+
+
+/** Result Card **/
+.MuiCard-root{
+  width:50%;
+  max-width: 50% !important;
+  margin:auto;
+  margin-top: 100px !important;
+  .MuiCardHeader-root{
+    background-color: rgb(180, 180, 180);
+  }
+
+  .resultOne,
+  .resultTwo{
+    display: flex;
+    justify-content: space-evenly;
+    margin:20px;
+    .details{
+      display: block;
+      text-align:left;
+    }
+  }
+}
