@@ -4,7 +4,7 @@ import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
+import SettingsVoiceIcon from '@mui/icons-material/SettingsVoice';
 import { useNavigate } from 'react-router-dom';
 
 export default function HomeSearchInput() {
@@ -37,7 +37,7 @@ export default function HomeSearchInput() {
       </IconButton>
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <IconButton disabled={!inputName} color="primary" sx={{ p: '10px', color: 'black' }} aria-label="RecordVoice" onClick={()=>navigatePage('record')}>
-        <RecordVoiceOverIcon />
+        <SettingsVoiceIcon />
       </IconButton>
     </Paper>
   );
