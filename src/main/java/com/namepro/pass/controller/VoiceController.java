@@ -70,7 +70,8 @@ public class VoiceController {
 			if (username == null)
 				userCredRepository.findAll().forEach(userCred::add);
 			else
-				userCredRepository.findByUsernameContaining(username).forEach(userCred::add);
+				//userCredRepository.findByUsernameContaining(username).forEach(userCred::add);
+				userCredRepository.findByUsername(username).forEach(userCred::add);
 
 			if (userCred.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);

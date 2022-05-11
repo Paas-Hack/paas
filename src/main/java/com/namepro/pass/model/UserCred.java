@@ -15,7 +15,7 @@ public class UserCred {
 	@Column(name = "username")
 	private String username;
 
-	@ColumnTransformer(forColumn = "password", read = "pgp_sym_decrypt(password, 'secret')", write = "pgp_sym_encrypt(?, 'secret')")
+	@ColumnTransformer(forColumn = "password", write = "pgp_sym_encrypt(?, 'secret')")
 	@Column(name = "password")
 	private String password;
 	
