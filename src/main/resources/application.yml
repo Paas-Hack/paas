@@ -1,12 +1,12 @@
 spring:
   datasource:
-    username: postgres
+    username: ashwin
     url: jdbc:postgresql://localhost:5432/passdb
-    password: pass7799
-  security:
-    user:
-      name: paas
-      password: paas
+    password: ash123
+#  security:
+#    user:
+#      name: paas
+#      password: paas
   jpa:
     properties:
       hibernate:
