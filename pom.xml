@@ -143,9 +143,20 @@
 <!--			<scope>system</scope>-->
 <!--			<systemPath>/../exLibs/*.jar</systemPath>-->
 <!--		</dependency>-->
+		<dependency>
+			<groupId>com.microsoft.cognitiveservices.speech</groupId>
+			<artifactId>client-sdk</artifactId>
+			<version>1.21.0</version>
+		</dependency>
 
 	</dependencies>
-
+	<repositories>
+		<repository>
+			<id>maven-cognitiveservices-speech</id>
+			<name>Microsoft Cognitive Services Speech Maven Repository</name>
+			<url>https://csspeechstorage.blob.core.windows.net/maven/</url>
+		</repository>
+	</repositories>
 	<build>
 		<plugins>
 			<plugin>

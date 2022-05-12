@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.namepro.pass.service.MSVoiceService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class VoiceController {
 
     @Autowired
     VoiceService voiceService;
+
+	@Autowired
+	MSVoiceService msVoiceService;
     
     @Autowired
 	UserCredRepository userCredRepository;
@@ -59,6 +63,22 @@ public class VoiceController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
     }
+
+	@GetMapping("/file/standardMs/{text}")
+	public ResponseEntity<?> convertTextToFile(@PathVariable String text) {
+		LOGGER.info(":::::name::::{}",text);
+		try {
+			File file = this.msVoiceService.generateWaveFile(text);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			return ResponseEntity.ok()
+					//.headers(headers)
+					.contentLength(file.length())
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(resource);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
     
     
     @GetMapping("/usercred")
