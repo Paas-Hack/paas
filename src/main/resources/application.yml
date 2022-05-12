@@ -4,13 +4,9 @@ server:
     context-path: /paas
 spring:
   datasource:
-    username: ashwin
-    url: jdbc:postgresql://localhost:5432/passdb
-    password: ash123
-#  security:
-#    user:
-#      name: paas
-#      password: paas
+    username: yugabyte
+    url: jdbc:postgresql://20.119.92.177:5433/yugabyte
+    password: Hackathon22!
   jpa:
     properties:
       hibernate:
@@ -20,3 +16,5 @@ spring:
             non_contextual_creation: 'true'
     hibernate:
       ddl-auto: update
+jwt:
+  secret: secret

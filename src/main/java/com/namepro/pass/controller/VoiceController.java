@@ -43,8 +43,7 @@ public class VoiceController {
     byte[] convertNameToBase64(@PathVariable String name) {
         return voiceService.textToSpeech(name);
     }
-    
-    
+        
     @GetMapping("/file/standard/{name}")
     public ResponseEntity<?> convertNameToFile(@PathVariable String name) {
     	LOGGER.info(":::::name::::{}",name);
