@@ -52,7 +52,7 @@ $col-yellow: rgb(241, 240, 240);
   position: absolute;
   bottom: 0px;
   width: 100%;
-  height:103px;
+  height:80px;
   .c9content{
     margin: 0 auto;
     width:50%;
@@ -159,14 +159,46 @@ $col-yellow: rgb(241, 240, 240);
     background-color: rgb(180, 180, 180);
   }
 
-  .resultOne,
-  .resultTwo{
+  .pronounciationDiv{
     display: flex;
-    justify-content: space-evenly;
-    margin:20px;
-    .details{
-      display: block;
-      text-align:left;
+    justify-content: space-between;
+    .resultOne,
+    .resultTwo{
+      display: flex;
+      justify-content: space-evenly;
+      margin:20px;
+      .details{
+        display: block;
+        text-align:left;
+      }
     }
+  }
+  
+}
+
+.loginCard{
+  margin-top:50px !important;
+  width:35% !important;
+  .loginLogoImg{
+    img{
+      margin-top:20px;
+      width:40%;
+    }
+  }
+  .formFields{
+    margin:20px;
+  }
+  .MuiFormControl-fullWidth.MuiTextField-root{
+    margin-top:0px !important;
+  }
+  .MuiButton-contained.MuiButton-fullWidth{
+    margin-top:0px !important;
+  }
+  .MuiGrid-root.MuiGrid-container{
+    display: flex;
+    justify-content: space-between;
+  }
+  .MuiFormControlLabel-root.MuiFormControlLabel-labelPlacementEnd{
+    display: flex !important;
   }
 }

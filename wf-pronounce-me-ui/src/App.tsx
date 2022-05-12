@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import HomePage from './components/HomePage';
 import RecordComponent from "./components/RecordComponent";
 import ResultComponent from "./components/ResultComponent";
+import LoginPage from "./components/LoginComponent";
 
 
 function App() {
@@ -21,8 +22,9 @@ function App() {
             <Routes>
               <Route path="/home" element={ <HomePage/> } />
               <Route path="/record" element={ <RecordComponent/> } />
-              <Route path="/result" element={ <ResultComponent/> } /> 
-              <Route path="/" element={ <HomePage/> } />
+              <Route path="/result" element={ <ResultComponent/> } />
+              <Route path="/login" element={ <LoginPage/> } /> 
+              <Route path="/" element={ <LoginPage/> } />
             </Routes>
           <Footer></Footer>
         </div>
