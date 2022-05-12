@@ -1,11 +1,14 @@
 package com.namepro.pass.config;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
+import com.namepro.pass.model.User;
+import com.namepro.pass.model.UserLogin;
+import com.namepro.pass.repository.UserLoginRepository;
+import com.namepro.pass.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -23,6 +26,12 @@ public class JwtTokenUtil implements Serializable {
 
 	@Value("${jwt.secret}")
 	private String secret;
+
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	UserLoginRepository userLoginRepository;
 
 	//retrieve username from jwt token
 	public String getUsernameFromToken(String token) {
@@ -70,6 +79,19 @@ public class JwtTokenUtil implements Serializable {
 	//validate token
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)
+				&& isUserLoggedIn(userDetails.getUsername()));
+	}
+
+	private boolean isUserLoggedIn(String username) {
+		Optional<User> user = userRepository.findById(username);
+		UserLogin userLogin = null;
+		if(user.isPresent()) {
+			userLogin = userLoginRepository.findByUser(user.get());
+		}
+		if(Objects.nonNull(userLogin)) {
+			return userLogin.isLoggedIn();
+		}
+		return false;
 	}
 }

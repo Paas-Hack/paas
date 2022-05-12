@@ -4,9 +4,9 @@ server:
     context-path: /paas
 spring:
   datasource:
-    username: yugabyte
-    url: jdbc:postgresql://20.119.92.177:5433/yugabyte
-    password: Hackathon22!
+    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    password: pass7799
   jpa:
     properties:
       hibernate:

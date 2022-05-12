@@ -56,6 +56,18 @@
 			<version>1.15</version>
 		</dependency>
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-ui</artifactId>
+			<version>1.5.13</version>
+		</dependency>
+
+		<dependency>
 			<groupId>jsapi</groupId>
 			<artifactId>jsapi</artifactId>
 			<scope>system</scope>
