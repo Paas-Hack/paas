@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.namepro.pass.service.MSVoiceService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -26,10 +25,9 @@ import com.namepro.pass.repository.UserCredRepository;
 import com.namepro.pass.repository.UserSpeechRepository;
 import com.namepro.pass.service.VoiceService;
 
+@Slf4j
 @RestController
 public class VoiceController {
-	
-	public static final Logger LOGGER = LogManager.getLogger(VoiceController.class);
 
     @Autowired
     VoiceService voiceService;
@@ -50,12 +48,11 @@ public class VoiceController {
         
     @GetMapping("/file/standard/{name}")
     public ResponseEntity<?> convertNameToFile(@PathVariable String name) {
-    	LOGGER.info(":::::name::::{}",name);
+    	log.info(":::::name::::{}",name);
     	try {
 			File file = voiceService.textToFile(name);
 			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 			return ResponseEntity.ok()
-			        //.headers(headers)
 			        .contentLength(file.length())
 			        .contentType(MediaType.APPLICATION_OCTET_STREAM)
 			        .body(resource);
@@ -64,14 +61,13 @@ public class VoiceController {
 		}
     }
 
-	@GetMapping("/file/standardMs/{text}")
+	@GetMapping("/standardMs/file/{text}")
 	public ResponseEntity<?> convertTextToFile(@PathVariable String text) {
-		LOGGER.info(":::::name::::{}",text);
+		log.info(":::::name::::{}",text);
 		try {
 			File file = this.msVoiceService.generateWaveFile(text);
 			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 			return ResponseEntity.ok()
-					//.headers(headers)
 					.contentLength(file.length())
 					.contentType(MediaType.APPLICATION_OCTET_STREAM)
 					.body(resource);
@@ -79,7 +75,18 @@ public class VoiceController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
-    
+
+	@GetMapping("/standardMs/speak")
+	public ResponseEntity<?> convertSpeakToText() {
+		try {
+			String text = this.msVoiceService.speechToText();
+			return ResponseEntity.ok()
+					.contentType(MediaType.TEXT_PLAIN)
+					.body(text);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
     
     @GetMapping("/usercred")
 	public ResponseEntity<List<UserCred>> getAllUserCreds(@RequestParam(required = false) String username) {
