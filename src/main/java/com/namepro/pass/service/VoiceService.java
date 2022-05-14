@@ -24,8 +24,6 @@ import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
 @Service
 public class VoiceService {
 	
-	
-	
 	public void setEnv() throws EngineException {
 		System.setProperty( "freetts.voices", "com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory");
         Central.registerEngineCentral( "com.sun.speech.freetts.jsapi.FreeTTSEngineCentral");

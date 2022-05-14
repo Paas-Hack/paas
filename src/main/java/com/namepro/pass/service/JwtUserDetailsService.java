@@ -107,7 +107,6 @@ public class JwtUserDetailsService implements UserDetailsService {
 	}
 
 	public List<UserPronunciation>  getRecordings(String name) {
-		List<UserPronunciation> pronunciations = new ArrayList<>();
 		Optional<User> user = userRepository.findById(name);
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("User not found with username: " + name);

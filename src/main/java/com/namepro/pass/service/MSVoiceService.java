@@ -29,7 +29,7 @@ public class MSVoiceService {
         // Creates a speech synthesizer using file as audio output.
         String fileName =  txtToPronounce.toLowerCase().replace(" ", "_");
 
-        AudioConfig fileOutput = AudioConfig.fromWavFileOutput(fileName);
+        AudioConfig fileOutput = AudioConfig.fromWavFileOutput(fileName+".wav");
 
         // Creates a speech synthesizer using a wave file as audio output.
         SpeechSynthesizer synthesizer = new SpeechSynthesizer(config, fileOutput);
