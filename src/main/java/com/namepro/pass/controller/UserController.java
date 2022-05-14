@@ -5,6 +5,7 @@ import com.namepro.pass.model.UserDTO;
 import com.namepro.pass.model.UserPronunciation;
 import com.namepro.pass.repository.UserRepository;
 import com.namepro.pass.service.JwtUserDetailsService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@SecurityRequirement(name = "namepro")
 public class UserController {
 
     @Autowired

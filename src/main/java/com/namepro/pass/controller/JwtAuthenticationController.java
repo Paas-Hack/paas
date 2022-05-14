@@ -3,6 +3,7 @@ package com.namepro.pass.controller;
 import java.util.Objects;
 
 import com.namepro.pass.model.UserDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import com.namepro.pass.service.JwtUserDetailsService;
 
 
 @RestController
+@SecurityRequirement(name = "namepro")
 public class JwtAuthenticationController {
 
 	@Autowired

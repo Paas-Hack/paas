@@ -20,7 +20,13 @@ spring:
 jwt:
   secret: secret
 
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+
 azure:
-  subscriptionKey: 592ccaa9c6254922a4f3b45b2b4c6c65
+  subscriptionKey: d8d3f55a-8679-4dad-bbe3-3b851100c78e
   subscriptionRegion: eastus
   languages-list: https://westus.tts.speech.microsoft.com/cognitiveservices/voices/list

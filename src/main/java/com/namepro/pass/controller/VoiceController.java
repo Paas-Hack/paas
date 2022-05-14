@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.namepro.pass.model.ConfigDTO;
 import com.namepro.pass.service.MSVoiceService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
+@SecurityRequirement(name = "namepro")
 public class VoiceController {
 
     @Autowired
