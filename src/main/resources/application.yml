@@ -16,6 +16,7 @@ spring:
             non_contextual_creation: 'true'
     hibernate:
       ddl-auto: update
+      show_sql: true
 jwt:
   secret: secret
 

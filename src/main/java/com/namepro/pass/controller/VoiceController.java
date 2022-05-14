@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namepro.pass.model.UserCred;
 import com.namepro.pass.model.UserSpeech;
-import com.namepro.pass.repository.UserCredRepository;
 import com.namepro.pass.repository.UserSpeechRepository;
 import com.namepro.pass.service.VoiceService;
 
@@ -34,10 +32,7 @@ public class VoiceController {
 
 	@Autowired
 	MSVoiceService msVoiceService;
-    
-    @Autowired
-	UserCredRepository userCredRepository;
-    
+
     @Autowired
 	UserSpeechRepository userSpeechRepository;
 
@@ -88,38 +83,7 @@ public class VoiceController {
 		}
 	}
     
-    @GetMapping("/usercred")
-	public ResponseEntity<List<UserCred>> getAllUserCreds(@RequestParam(required = false) String username) {
-		try {
-			List<UserCred> userCred = new ArrayList<UserCred>();
 
-			if (username == null)
-				userCredRepository.findAll().forEach(userCred::add);
-			else
-				//userCredRepository.findByUsernameContaining(username).forEach(userCred::add);
-				userCredRepository.findByUsername(username).forEach(userCred::add);
-
-			if (userCred.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(userCred, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-    
-    @PostMapping("/usercred")
-	public ResponseEntity<UserCred> createUserCred(@RequestBody UserCred usercred) {
-		try {
-			UserCred _usercred = userCredRepository
-					.save(new UserCred(usercred.getUsername(), usercred.getPassword()));
-			return new ResponseEntity<>(_usercred, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-    
     @GetMapping("/userspeech")
 	public ResponseEntity<List<UserSpeech>> getAllUserSpeeches(@RequestParam(required = false) String username) {
 		try {
