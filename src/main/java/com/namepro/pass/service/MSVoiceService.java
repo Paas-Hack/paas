@@ -54,7 +54,7 @@ public class MSVoiceService {
         }
         synthesizer.close();
         fileOutput.close();
-        return new File(fileName+".wav");
+        return new File(fileName);
     }
 
     private SpeechConfig getSpeechConfig() {

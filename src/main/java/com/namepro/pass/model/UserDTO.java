@@ -7,6 +7,5 @@ public class UserDTO {
     private String username;
     private String password;
 
-    private byte[] recording;
-    private boolean isPrimary;
+
 }

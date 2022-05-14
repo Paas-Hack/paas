@@ -3,6 +3,7 @@ package com.namepro.pass.controller;
 import com.namepro.pass.model.User;
 import com.namepro.pass.model.UserDTO;
 import com.namepro.pass.model.UserPronunciation;
+import com.namepro.pass.model.UserPronunciationDTO;
 import com.namepro.pass.repository.UserRepository;
 import com.namepro.pass.service.JwtUserDetailsService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -28,19 +29,19 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping("/users/{name}")
-    public List<User> getUsersByName(@PathVariable String name) {
-        List<User> result = userService.findByName(name);
+    @GetMapping("/users/{userId}")
+    public List<User> getUsersByName(@PathVariable String userId) {
+        List<User> result = userService.findByName(userId);
         return result;
     }
 
-    @GetMapping("/user/{name}/recording")
-    public List<UserPronunciation> getRecordingsByUser(@PathVariable String name) {
-        return userService.getRecordings(name);
+    @GetMapping("/user/{userId}/recording")
+    public List<UserPronunciation> getRecordingsByUser(@PathVariable String userId) {
+        return userService.getRecordings(userId);
     }
 
     @RequestMapping(value = "/user/recording", method = RequestMethod.POST)
-    public ResponseEntity<?> savePronunciation(@RequestBody UserDTO user) throws Exception {
+    public ResponseEntity<?> savePronunciation(@RequestBody UserPronunciationDTO user) throws Exception {
         userService.savePronunciation(user);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }

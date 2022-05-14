@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.namepro.pass.model.User;
-import com.namepro.pass.model.UserDTO;
-import com.namepro.pass.model.UserLogin;
-import com.namepro.pass.model.UserPronunciation;
+import com.namepro.pass.model.*;
 import com.namepro.pass.repository.UserLoginRepository;
 import com.namepro.pass.repository.UserPronunciationRepository;
 import com.namepro.pass.repository.UserRepository;
@@ -95,7 +92,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		return userRepository.findByName(lanId);
 	}
 
-	public void savePronunciation(UserDTO userDto) {
+	public void savePronunciation(UserPronunciationDTO userDto) {
 		Optional<User> user = userRepository.findById(userDto.getUsername());
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("User not found with username: " + userDto.getUsername());

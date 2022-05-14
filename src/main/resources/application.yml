@@ -27,6 +27,6 @@ springdoc:
     path: /swagger-ui.html
 
 azure:
-  subscriptionKey: d8d3f55a-8679-4dad-bbe3-3b851100c78e
+  subscriptionKey: 5630cf56b90e481a809a97a7a7acc535
   subscriptionRegion: eastus
   languages-list: https://westus.tts.speech.microsoft.com/cognitiveservices/voices/list
