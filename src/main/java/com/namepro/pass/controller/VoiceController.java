@@ -2,26 +2,21 @@ package com.namepro.pass.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.namepro.pass.model.ConfigDTO;
 import com.namepro.pass.service.MSVoiceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.namepro.pass.model.UserSpeech;
-import com.namepro.pass.repository.UserSpeechRepository;
 import com.namepro.pass.service.VoiceService;
+import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @RestController
@@ -33,19 +28,33 @@ public class VoiceController {
 	@Autowired
 	MSVoiceService msVoiceService;
 
-    @Autowired
-	UserSpeechRepository userSpeechRepository;
+	@Autowired
+	ConfigDTO configDTO;
+
+	@Value("${azure.subscriptionKey}")
+	private String subscriptionKey;
+
+	@Value("${azure.languages-list}")
+	private String languagesListUrl;
 
     @GetMapping("/base64/{name}")
     byte[] convertNameToBase64(@PathVariable String name) {
-        return voiceService.textToSpeech(name);
+    	return voiceService.textToSpeech(name);
     }
         
     @GetMapping("/file/standard/{name}")
     public ResponseEntity<?> convertNameToFile(@PathVariable String name) {
     	log.info(":::::name::::{}",name);
+		File file = null;
     	try {
-			File file = voiceService.textToFile(name);
+			if(!configDTO.isSwitchIndex()) {
+				log.info("Using FreeTTS for text to Speech conversion");
+				file = voiceService.textToFile(name);
+			} else {
+				log.info("Using Azure for text to Speech conversion");
+				file = this.msVoiceService.generateWaveFile(name);
+			}
+
 			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 			return ResponseEntity.ok()
 			        .contentLength(file.length())
@@ -56,20 +65,20 @@ public class VoiceController {
 		}
     }
 
-	@GetMapping("/standardMs/file/{text}")
-	public ResponseEntity<?> convertTextToFile(@PathVariable String text) {
-		log.info(":::::name::::{}",text);
-		try {
-			File file = this.msVoiceService.generateWaveFile(text);
-			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-			return ResponseEntity.ok()
-					.contentLength(file.length())
-					.contentType(MediaType.APPLICATION_OCTET_STREAM)
-					.body(resource);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-	}
+//	@GetMapping("/standardMs/file/{text}")
+//	public ResponseEntity<?> convertTextToFile(@PathVariable String text) {
+//		log.info(":::::name::::{}",text);
+//		try {
+//			File file = this.msVoiceService.generateWaveFile(text);
+//			InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//			return ResponseEntity.ok()
+//					.contentLength(file.length())
+//					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+//					.body(resource);
+//		} catch (Exception e) {
+//			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//		}
+//	}
 
 	@GetMapping("/standardMs/speak")
 	public ResponseEntity<?> convertSpeakToText() {
@@ -82,37 +91,22 @@ public class VoiceController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-    
 
-    @GetMapping("/userspeech")
-	public ResponseEntity<List<UserSpeech>> getAllUserSpeeches(@RequestParam(required = false) String username) {
-		try {
-			List<UserSpeech> userSpeech = new ArrayList<UserSpeech>();
+	@GetMapping("/standardMs/languages")
+	public ResponseEntity<?> getAllSupportedLanguages() {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Ocp-Apim-Subscription-Key", subscriptionKey);
+		HttpEntity<String> entity = new HttpEntity<>("body", headers);
+    	return restTemplate.exchange(languagesListUrl, HttpMethod.GET, entity, List.class);
 
-			if (username == null)
-				userSpeechRepository.findAll().forEach(userSpeech::add);
-			else
-				userSpeechRepository.findByUsernameContaining(username).forEach(userSpeech::add);
-
-			if (userSpeech.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-
-			return new ResponseEntity<>(userSpeech, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
     
-    @PostMapping("/userspeech")
-	public ResponseEntity<UserSpeech> createUserSpeech(@RequestBody UserSpeech userSpeech) {
-		try {
-			UserSpeech _userspeech = userSpeechRepository
-					.save(new UserSpeech(userSpeech.getUsername(), userSpeech.getSpeechtext()));
-			return new ResponseEntity<>(_userspeech, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+
+	@GetMapping("/update/config/{value}")
+	public String setConfig(@PathVariable boolean value) {
+		configDTO.setSwitchIndex(value);
+		return "Successfully updated";
 	}
 
 }
