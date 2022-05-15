@@ -7,8 +7,14 @@ spring:
     username: yugabyte
     url: jdbc:postgresql://20.119.92.177:5433/yugabyte
     password: Hackathon22!
-    testOnBorrow: true
-    validationQuery: SELECT 1
+    hikari:
+      minimumIdle: 10
+      maximumPoolSize: 10
+      idleTimeout: 60000
+      connectionTimeout: 30000
+      connectionTestQuery: SELECT 1
+      maxLifetime: 1200000
+      leak-detection-threshold: 45000
   jpa:
     properties:
       hibernate:
