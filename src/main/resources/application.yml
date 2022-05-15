@@ -16,9 +16,17 @@ spring:
             non_contextual_creation: 'true'
     hibernate:
       ddl-auto: update
+      show_sql: true
 jwt:
   secret: secret
 
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+
 azure:
-  subscriptionKey: 592ccaa9c6254922a4f3b45b2b4c6c65;
-  subscriptionRegion: eastus;
+  subscriptionKey: 5630cf56b90e481a809a97a7a7acc535
+  subscriptionRegion: eastus
+  languages-list: https://westus.tts.speech.microsoft.com/cognitiveservices/voices/list

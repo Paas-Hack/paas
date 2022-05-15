@@ -2,6 +2,8 @@ package com.namepro.pass.controller;
 
 import java.util.Objects;
 
+import com.namepro.pass.model.UserDTO;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.namepro.pass.config.JwtTokenUtil;
 import com.namepro.pass.model.JwtRequest;
 import com.namepro.pass.model.JwtResponse;
-import com.namepro.pass.model.UserDTO;
 import com.namepro.pass.service.JwtUserDetailsService;
 
 
 @RestController
+@SecurityRequirement(name = "namepro")
 public class JwtAuthenticationController {
 
 	@Autowired
@@ -55,7 +56,7 @@ public class JwtAuthenticationController {
 
 	}
 	
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
 		return ResponseEntity.ok(userDetailsService.saveUser(user));
 	}

@@ -2,7 +2,6 @@ package com.namepro.pass.model;
 
 import lombok.Data;
 
-import javax.annotation.Generated;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
