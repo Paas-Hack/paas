@@ -29,12 +29,24 @@ $col-yellow: rgb(241, 240, 240);
     position: relative;
     height: 60px;
     margin: 0 auto;
+    display:flex;
+    justify-content: space-around;
     #brand{
       position: absolute;
       height: 35px;
       top: 9px;
       left: 30px;
       overflow: hidden;
+    }
+    .MuiTab-textColorPrimary{
+      font-size: large;
+      font-weight: bolder;
+    }
+    .MuiTab-textColorPrimary.Mui-selected{
+      color: white;
+    }
+    .MuiTabs-indicator {
+      display: none;
     }
   }
 }
@@ -95,6 +107,11 @@ $col-yellow: rgb(241, 240, 240);
     img {
       width:100%;
     }
+  }
+  .tableResults{
+  	width:90%;
+  	margin:auto;
+  	margin-top: 50px;
   }
 }
 
@@ -157,8 +174,13 @@ $col-yellow: rgb(241, 240, 240);
   margin-top: 100px !important;
   .MuiCardHeader-root{
     background-color: rgb(180, 180, 180);
+    .MuiCardHeader-content{
+    	text-align: left;
+    }
   }
-
+  .MuiCardContent-root {
+   text-align: left;
+  }
   .pronounciationDiv{
     display: flex;
     justify-content: space-between;

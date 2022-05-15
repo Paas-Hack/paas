@@ -89,7 +89,7 @@ class JwtUserDetailsServiceTest {
 
     @Test
     void findByName() {
-        userService.findByName("2002440");
+        userService.findBySearchParam("2002440");
     }
 
     @Test

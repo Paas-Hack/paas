@@ -12,5 +12,5 @@ public interface UserRepository  extends JpaRepository<User, String> {
             " or lower(u.lastName) like lower(concat('%', ?1,'%'))" +
             " or lower(u.fullName) like lower(concat('%', ?1,'%'))" +
             " or lower(u.lanId) like lower(concat('%', ?1, '%'))")
-    List<User> findByName(String name);
+    List<User> findBySearchParam(String searchParam);
 }

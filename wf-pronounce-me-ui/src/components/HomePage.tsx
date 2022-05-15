@@ -4,14 +4,10 @@ import HomeSearchInput from './HomeSearchInput';
 
 
 interface TitleProps {
-    title?: string;
-    subtitle?: string;
-    children?: any;
 }
 
 class HomePage extends Component<TitleProps> {
     render() {
-        const { title, subtitle, children } = this.props;
         return (
             <>
                 <div className="homePageContent">
