@@ -41,5 +41,5 @@ public class User {
     private boolean isAdmin;
 
     @Column(name = "IS_SUBSCRIBED")
-    private boolean isSubscribed;
+    private boolean isSubscribed = false;
 }
