@@ -1,6 +1,7 @@
 package com.namepro.pass.service;
 
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -25,6 +26,9 @@ import com.namepro.pass.model.UserPronunciationDTO;
 import com.namepro.pass.repository.UserLoginRepository;
 import com.namepro.pass.repository.UserPronunciationRepository;
 import com.namepro.pass.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
 
 
 @Service
@@ -112,7 +116,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		return userRepository.findBySearchParam(searchParam);
 	}
 
-	public void savePronunciation(UserPronunciationDTO userDto) {
+	public void savePronunciation(UserPronunciationDTO userDto, MultipartFile file) throws IOException {
 		Optional<User> user = userRepository.findById(userDto.getUsername());
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("User not found with username: " + userDto.getUsername());
@@ -124,9 +128,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 		pronunciation.setPrimary(userDto.isPrimary());
 		pronunciation.setCreatedBy(userDto.getUsername());
 		pronunciation.setCreatedTs(LocalDateTime.now());
+		pronunciation.setData(file.getBytes());
 		userPronunciationRepository.save(pronunciation);
 	}
 
+	@Transactional
 	public List<UserPronunciation>  getRecordings(String name) {
 		Optional<User> user = userRepository.findById(name);
 		if (!user.isPresent()) {
