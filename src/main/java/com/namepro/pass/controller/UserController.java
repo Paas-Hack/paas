@@ -4,14 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.namepro.pass.model.User;
 import com.namepro.pass.model.UserPronunciation;
@@ -20,6 +16,7 @@ import com.namepro.pass.repository.UserRepository;
 import com.namepro.pass.service.JwtUserDetailsService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @SecurityRequirement(name = "namepro")
@@ -52,17 +49,25 @@ public class UserController {
         return userService.getRecordings(userId);
     }
 
-    @RequestMapping(value = "/user/recording", method = RequestMethod.POST)
-    public ResponseEntity<?> savePronunciation(@RequestBody UserPronunciationDTO user) throws Exception {
-        userService.savePronunciation(user);
-        return new ResponseEntity<>("Success", HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/user/{userId}/recording/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletePronunciation(@PathVariable String userId, @PathVariable long id) throws Exception {
         userService.deletePronunciation(userId, id);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/{userId}/subscribe/{substr}", method = RequestMethod.POST)
+    public ResponseEntity<?> subscribeUser(@PathVariable String userId, @PathVariable boolean substr) throws Exception {
+        userService.updateUser(userId, substr);
+        return new ResponseEntity<>("Successfully Updated", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/user/{userId}/primary/{isPrimary}/recording", method = RequestMethod.POST, consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> savePronunciationAsFile(@PathVariable String userId, @PathVariable boolean isPrimary, @RequestPart ("file") MultipartFile file) throws Exception {
+        UserPronunciationDTO user = new UserPronunciationDTO();
+        user.setUsername(userId);
+        user.setPrimary(isPrimary);
+        userService.savePronunciation(user, file);
+        return new ResponseEntity<>("Success", HttpStatus.OK);
+    }
 
 }

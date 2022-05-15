@@ -63,6 +63,7 @@ public class VoiceController {
 			        .contentType(MediaType.APPLICATION_OCTET_STREAM)
 			        .body(resource);
 		} catch (Exception e) {
+			log.error(":::::convertNameToFile Exception::::",e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
     }

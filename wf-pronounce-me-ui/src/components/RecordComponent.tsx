@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 // @ts-ignore
 import { Recorder } from 'react-voice-recorder';
 import 'react-voice-recorder/dist/index.css'; 
-
+import ApiService from './ApiService';
 
 class RecordComponent extends Component<any> { 
-    state = {
-        inputName:'',
+	  userObj: any = {};
+	  state = {
+	    userObj: this.userObj,
         audioDetails: {
             url: null,
             blob: null,
@@ -21,8 +22,8 @@ class RecordComponent extends Component<any> {
     inputRef:any = React.createRef();
 
     componentDidMount(){ 
-        const inputName =  sessionStorage.getItem('inputName') || '';
-        setTimeout(()=>this.setState({inputName:inputName}),1);
+        const userData =  JSON.parse(sessionStorage.getItem('userData') || '{}');
+        setTimeout(()=>this.setState({userObj: userData }),1);
     }
 
     
@@ -30,14 +31,29 @@ class RecordComponent extends Component<any> {
         console.log(data)
         this.setState({ audioDetails: data });
     }
+    
     handleAudioUpload = (file: any) => {
-        console.log(file);
+        console.log(file, this.state.audioDetails.blob);
         if(!file){
             this.inputRef.current.click();
         }
+        const formData = new FormData();
+        formData.append("username", this.state.userObj.uId);
+        formData.append("recording", file);
+        formData.append("isPrimary", true+"");
+
+	        ApiService.uploadUserRecordings(formData)
+		    	.then((res:any) => {
+			        console.log('---getUserRecordings res---', res.data);
+			      })
+		    	.catch((err:any)=> { 
+		        console.log('---error---', err); 
+		      });
     }
+    
     handleOnChange = (value: any, name: any) => {
         console.log(value, name);
+        
     }
 
     handleReset = () => {
@@ -60,7 +76,7 @@ class RecordComponent extends Component<any> {
             <div className="recordingContainer">
                 <Recorder
                     record={true}
-                    title={ <span>{"\""+this.state?.inputName+ "\" Recording"}</span>}
+                    title={ <span>{"\""+this.state?.userObj?.fullName+ "\" Recording"}</span>}
                     audioURL={this.state.audioDetails.url}
                     showUIAudio
                     handleAudioStop={(data:any) => this.handleAudioStop(data)}
