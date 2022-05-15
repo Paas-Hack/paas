@@ -157,7 +157,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 			CompletableFuture<Process> future = p.onExit();
 			future.get();
 			log.info(":::::getPhoneticString::::{}", new String(p.getInputStream().readAllBytes()));
-			res = new String(Files.readAllBytes(Paths.get(PYTHON_SCRIPT_PATH+"output.txt")));
+			res = new String(Files.readAllBytes(Paths.get("output.txt")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
