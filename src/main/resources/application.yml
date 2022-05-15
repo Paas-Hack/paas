@@ -7,6 +7,8 @@ spring:
     username: yugabyte
     url: jdbc:postgresql://20.119.92.177:5433/yugabyte
     password: Hackathon22!
+    testOnBorrow: true
+    validationQuery: SELECT 1
   jpa:
     properties:
       hibernate:
@@ -23,8 +25,8 @@ jwt:
 
 springdoc:
   swagger-ui:
-    disable-swagger-default-url: true
-    path: /swagger-ui.html
+    disable-swagger-default-url: false
+    #path: /swagger-ui.html
 
 azure:
   subscriptionKey: 5630cf56b90e481a809a97a7a7acc535
