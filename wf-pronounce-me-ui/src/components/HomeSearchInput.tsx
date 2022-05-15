@@ -42,7 +42,7 @@ export default function HomeSearchInput() {
   
   const openUser = (rowData: any) => {
   	console.log('--rowData--', rowData);
-  	sessionStorage.setItem('userData', rowData);
+  	sessionStorage.setItem('userData', JSON.stringify(rowData));
   	navigate('/result');
   }
   

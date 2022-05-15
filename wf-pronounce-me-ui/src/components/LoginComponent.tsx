@@ -30,6 +30,7 @@ export default function LoginPage() {
     	.then((res:any) => { 
         sessionStorage.setItem('username', userObj.username+"");
         console.log('---res---', res);
+        sessionStorage.setItem('jwtToken', res.data && res.data.token);
         getUserData(userObj.username);
       })
     	.catch((err:any)=> { 

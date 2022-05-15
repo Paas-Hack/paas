@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 	
@@ -149,8 +152,11 @@ public class JwtUserDetailsService implements UserDetailsService {
 	private String getPhoneticString(String name) {
 		String res= "";
 		try {
-			String command = "python /c start python "+PYTHON_SCRIPT_PATH+"phonetic.py";
+			String command = "python "+PYTHON_SCRIPT_PATH+"phonetic.py";
 			Process p = Runtime.getRuntime().exec(command);
+			CompletableFuture<Process> future = p.onExit();
+			future.get();
+			log.info(":::::getPhoneticString::::{}", new String(p.getInputStream().readAllBytes()));
 			res = new String(Files.readAllBytes(Paths.get(PYTHON_SCRIPT_PATH+"output.txt")));
 		} catch (Exception e) {
 			e.printStackTrace();
