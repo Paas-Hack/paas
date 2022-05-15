@@ -120,6 +120,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 		UserPronunciation pronunciation = new UserPronunciation();
 		pronunciation.setUser(user.get());
 		pronunciation.setPronunciation(userDto.getRecording());
+		pronunciation.setPhoneticString(userDto.getPhoneticString());
 		pronunciation.setPrimary(userDto.isPrimary());
 		pronunciation.setCreatedBy(userDto.getUsername());
 		pronunciation.setCreatedTs(LocalDateTime.now());
@@ -161,5 +162,15 @@ public class JwtUserDetailsService implements UserDetailsService {
 		if(userPronunciation.isPresent()) {
 			userPronunciationRepository.delete(userPronunciation.get());
 		}
+	}
+
+	public void updateUser(String userId, boolean subscriptionFlag) {
+		Optional<User> user = userRepository.findById(userId);
+		if (!user.isPresent()) {
+			throw new UsernameNotFoundException("User not found with username: " + userId);
+		}
+		User newUser = user.get();
+		newUser.setSubscribed(subscriptionFlag);
+		userRepository.save(newUser);
 	}
 }

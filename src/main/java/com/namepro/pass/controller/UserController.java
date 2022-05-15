@@ -64,5 +64,10 @@ public class UserController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/user/{userId}/subscribe/{substr}", method = RequestMethod.POST)
+    public ResponseEntity<?> subscribeUser(@PathVariable String userId, @PathVariable boolean substr) throws Exception {
+        userService.updateUser(userId, substr);
+        return new ResponseEntity<>("Successfully Updated", HttpStatus.OK);
+    }
 
 }
