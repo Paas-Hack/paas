@@ -1,16 +1,16 @@
 package com.namepro.pass.service;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-import com.namepro.pass.model.*;
-import com.namepro.pass.repository.UserLoginRepository;
-import com.namepro.pass.repository.UserPronunciationRepository;
-import com.namepro.pass.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +19,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.namepro.pass.model.User;
+import com.namepro.pass.model.UserDTO;
+import com.namepro.pass.model.UserLogin;
+import com.namepro.pass.model.UserPronunciation;
+import com.namepro.pass.model.UserPronunciationDTO;
+import com.namepro.pass.repository.UserLoginRepository;
+import com.namepro.pass.repository.UserPronunciationRepository;
+import com.namepro.pass.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 	
@@ -32,6 +46,9 @@ public class JwtUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	UserPronunciationRepository userPronunciationRepository;
+	
+	
+	public static final String PYTHON_SCRIPT_PATH = "D:\\workspace\\pronounce-me-py\\English-to-IPA-master\\";
 	
 	 
 	private PasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
@@ -88,11 +105,21 @@ public class JwtUserDetailsService implements UserDetailsService {
 		return null;
 	}
 
-	public List<User> findByName(String lanId) {
-		return userRepository.findByName(lanId);
+	
+	public User findById(String userId) {
+		Optional<User> user = userRepository.findById(userId);
+		if (!user.isPresent()) {
+			throw new UsernameNotFoundException("User not found with username: " + userId);
+		}
+		return user.get();
+	}
+	
+	
+	public List<User> findBySearchParam(String searchParam) {
+		return userRepository.findBySearchParam(searchParam);
 	}
 
-	public void savePronunciation(UserPronunciationDTO userDto) {
+	public void savePronunciation(UserPronunciationDTO userDto, MultipartFile file) throws IOException {
 		Optional<User> user = userRepository.findById(userDto.getUsername());
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("User not found with username: " + userDto.getUsername());
@@ -100,18 +127,41 @@ public class JwtUserDetailsService implements UserDetailsService {
 		UserPronunciation pronunciation = new UserPronunciation();
 		pronunciation.setUser(user.get());
 		pronunciation.setPronunciation(userDto.getRecording());
+		pronunciation.setPhoneticString(userDto.getPhoneticString());
 		pronunciation.setPrimary(userDto.isPrimary());
 		pronunciation.setCreatedBy(userDto.getUsername());
 		pronunciation.setCreatedTs(LocalDateTime.now());
+		pronunciation.setData(file.getBytes());
 		userPronunciationRepository.save(pronunciation);
 	}
 
+	@Transactional
 	public List<UserPronunciation>  getRecordings(String name) {
 		Optional<User> user = userRepository.findById(name);
 		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("User not found with username: " + name);
 		}
-		return userPronunciationRepository.findAllByUser(user.get());
+		List<UserPronunciation> userPronunciations = userPronunciationRepository.findAllByUser(user.get());
+		userPronunciations.stream().forEach(p -> {
+			p.setPhoneticString(getPhoneticString(p.getUser().getFullName())); 
+		});
+		return userPronunciations;
+	}
+	
+	
+	private String getPhoneticString(String name) {
+		String res= "";
+		try {
+			String command = "python "+PYTHON_SCRIPT_PATH+"phonetic.py";
+			Process p = Runtime.getRuntime().exec(command);
+			CompletableFuture<Process> future = p.onExit();
+			future.get();
+			log.info(":::::getPhoneticString::::{}", new String(p.getInputStream().readAllBytes()));
+			res = new String(Files.readAllBytes(Paths.get("output.txt")));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	public void deletePronunciation(String userId, long id) {
@@ -124,5 +174,15 @@ public class JwtUserDetailsService implements UserDetailsService {
 		if(userPronunciation.isPresent()) {
 			userPronunciationRepository.delete(userPronunciation.get());
 		}
+	}
+
+	public void updateUser(String userId, boolean subscriptionFlag) {
+		Optional<User> user = userRepository.findById(userId);
+		if (!user.isPresent()) {
+			throw new UsernameNotFoundException("User not found with username: " + userId);
+		}
+		User newUser = user.get();
+		newUser.setSubscribed(subscriptionFlag);
+		userRepository.save(newUser);
 	}
 }

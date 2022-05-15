@@ -8,4 +8,5 @@ public class UserPronunciationDTO {
     private String username;
     private byte[] recording;
     private boolean isPrimary;
+    private String phoneticString;
 }

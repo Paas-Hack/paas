@@ -39,4 +39,7 @@ public class User {
 
     @Column(name = "IS_ADMIN")
     private boolean isAdmin;
+
+    @Column(name = "IS_SUBSCRIBED")
+    private boolean isSubscribed = false;
 }

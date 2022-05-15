@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/paas/views/static/css/main.ee125ea4.css",
+    "main.js": "/paas/views/static/js/main.e1677e31.js",
+    "static/js/787.dca5e467.chunk.js": "/paas/views/static/js/787.dca5e467.chunk.js",
+    "static/media/login.png": "/paas/views/static/media/login.c7bc28a8f0d5e9253e08.png",
+    "static/media/pronounce_names.png": "/paas/views/static/media/pronounce_names.97632cd4aeb26cc4a1c4.png",
+    "index.html": "/paas/views/index.html",
+    "main.ee125ea4.css.map": "/paas/views/static/css/main.ee125ea4.css.map",
+    "main.e1677e31.js.map": "/paas/views/static/js/main.e1677e31.js.map",
+    "787.dca5e467.chunk.js.map": "/paas/views/static/js/787.dca5e467.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ee125ea4.css",
+    "static/js/main.e1677e31.js"
+  ]
+}

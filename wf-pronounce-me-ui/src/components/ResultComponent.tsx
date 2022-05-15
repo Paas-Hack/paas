@@ -15,36 +15,78 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReactAudioPlayer from 'react-audio-player';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import PersonIcon from '@mui/icons-material/Person';
-// @ts-ignore
-import TestOneMp3 from '../assets/test1.mp3';
+import ApiService from './ApiService';
+
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+	const ExpandMore = styled((props: ExpandMoreProps) => {
+	  const { expand, ...other } = props;
+	  return <IconButton {...other} />;
+	})(({ theme, expand }) => ({
+	  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+	  marginLeft: 'auto',
+	  transition: theme.transitions.create('transform', {
+	    duration: theme.transitions.duration.shortest,
+	  }),
+	}));
 
 class ResultComponent extends Component<any> { 
   userObj: any = {};
   state = {
     userObj: this.userObj,
-    expanded: false
+    expanded: false,
+    loggedInUserData: this.userObj,
+    standardRecordingUrl: '',
+    preferredRecordingUrl: '',
+    preferredRecording: this.userObj
   }
 
-  componentDidMount() { 
-    const inputName =  sessionStorage.getItem('inputName') || '';
-    setTimeout(()=>this.setState({userObj:{ standardName: inputName}}),1);
-    console.log('-----onLoad---', inputName, this.state.userObj);
+  componentDidMount() { 	
+  	const loggedInUserData =  JSON.parse(sessionStorage.getItem('loggedInUserData') || '{}');
+    const userData =  JSON.parse(sessionStorage.getItem('userData') || '{}');
+    setTimeout(()=>this.setState({userObj: userData, loggedInUserData: loggedInUserData }),1);
+    console.log('-----onLoad---', this.state.userObj);
+    if(userData.uid){
+    	this.getUserRecordings(userData.uid);
+    	this.getRecording(userData.fullName);
+    }
+    
+    /* if (!window.AudioContext) {
+      if (!window.webkitAudioContext) {
+        alert("Your browser does not support any AudioContext and cannot play back this audio.");
+        return;
+      }
+      window.AudioContext = window.webkitAudioContext;
+    }
+    this.context = new AudioContext();    */
   }
+  
+  
+    getUserRecordings = (uId:any) => {
+	  ApiService.getUserRecordings(uId)
+    	.then((res:any) => {
+        const blob = new Blob([res.data[0].pronunciation], { type: 'audio/mp3' });
+        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: window.URL.createObjectURL(new Blob([blob])) }),1);
+        console.log('---getUserRecordings res---', res.data, window.URL.createObjectURL(new Blob([blob])));
+      })
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+      });
+    };
+    
+    getRecording = (userName: any) => {
+	  ApiService.getRecording(userName)
+    	.then((res:any) => { 
+        console.log('---getUserRecordings res---', res);
+        setTimeout(()=>this.setState({standardRecordingUrl: window.URL.createObjectURL(new Blob([res.data])) }),1);
+      })
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+      });
+    };
 
   handleExpandClick = () => {
     this.setState({expanded:!this.state.expanded});
@@ -55,6 +97,33 @@ class ResultComponent extends Component<any> {
     // @ts-ignore
     audioRef.play();
   }
+  
+  navigatePage = (route:any) => {
+ 	 window.location.href = window.location.href.replace('/result', '/'+route);
+  }
+  
+  
+  /* 
+  playByteArray = (byteArray) => {
+    const arrayBuffer = new ArrayBuffer(byteArray.length);
+    const bufferView = new Uint8Array(arrayBuffer);
+    for (i = 0; i < byteArray.length; i++) {
+      bufferView[i] = byteArray[i];
+    }
+    context.decodeAudioData(arrayBuffer, function(buffer) {
+        const buf = buffer;
+        this.play(buf);
+    });
+  }
+ 
+ 
+	 play = (buf: any) => {
+	    const source = this.context.createBufferSource();
+	    source.buffer = buf;
+	    source.connect(this.context.destination);
+	    source.start(0);
+	 }
+	 */
 
   render() {
     return (
@@ -65,47 +134,50 @@ class ResultComponent extends Component<any> {
               <PersonIcon />
             </Avatar>
           }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
+          title={this.state?.userObj?.email}
+          subheader={this.state?.userObj?.lanId}
         />
           <div className="pronounciationDiv">
             <div className="resultOne">
               <div className="details">
                 <strong>Standard</strong>
-                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.standardName}</Typography>
-                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.standardPronounciation}</Typography>
+                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.fullName}</Typography>
+                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.standardPhoneticName}</Typography>
               </div>   
+              {this.state?.userObj?.fullName && this.state.standardRecordingUrl && 
               <IconButton color="primary" sx={{ p: '10px', color: 'black' }} aria-label="RecordVoice" 
                   onClick={()=>this.playVoice('standardAudioRef')}>
                 <RecordVoiceOverIcon />
-              </IconButton>    
-              {this.state?.userObj?.standardName && 
-                <audio id="standardAudioRef" src={"paas/file/standard/"+this.state.userObj.standardName}></audio> }
+                <audio id="standardAudioRef" src={this.state.standardRecordingUrl}></audio>
+              </IconButton>  }
             </div>
-          { this.state?.userObj?.preferredPronounciation && <div className="resultTwo">
+          { this.state?.preferredRecording?.pronunciation && <div className="resultTwo">
               <div className="details">
                 <strong>Preferred</strong>
-                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.preferredName}</Typography>
-                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.preferredPronounciation}</Typography>
+                <Typography variant="body2" color="text.secondary">{this.state?.preferredRecording?.phoneticString}</Typography>
+                <Typography variant="body2" color="text.secondary">{this.state?.userObj?.preferredPhoneticName}</Typography>
               </div>       
-              <IconButton color="primary" sx={{ p: '10px', color: 'black' }} aria-label="RecordVoice" 
+               {this.state?.preferredRecordingUrl && 
+               <IconButton color="primary" sx={{ p: '10px', color: 'black' }} aria-label="RecordVoice" 
                   onClick={()=>this.playVoice('preferredAudioRef')}>
-                {this.state?.userObj?.preferredName && 
-                    <audio id="standardAudioRef" src={"paas/file/preferred/"+this.state.userObj.preferredName}></audio> }
-              </IconButton>    
-              <audio id="preferredAudioRef" src={TestOneMp3}></audio>
+                   <RecordVoiceOverIcon />
+                    <audio id="preferredAudioRef" src={this.state?.preferredRecordingUrl}></audio> 
+              </IconButton>  }
+                
             </div>}
           </div>
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
-            Hello World is Active
-          </Typography>
+          <Typography variant="body2" color="text.secondary"><strong>First Name  </strong>{this.state?.userObj?.firstName}</Typography>
+          <Typography variant="body2" color="text.secondary"><strong>Last Name  </strong>{this.state?.userObj?.lastName}</Typography>
+          <Typography variant="body2" color="text.secondary"><strong>Date Of Joining  </strong>{this.state?.userObj?.doj}</Typography>
+          <Typography variant="body2" color="text.secondary"><strong>Work Location  </strong>{this.state?.userObj?.workLoc}</Typography>
+          <Typography variant="body2" color="text.secondary"><strong>Phone Number  </strong>{this.state?.userObj?.phone}</Typography>
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="Delete Pronunciation">
             <DeleteIcon />
           </IconButton>
-          <IconButton aria-label="Edit Pronunciation">
+          <IconButton aria-label="Edit Pronunciation" onClick={()=>this.navigatePage('record')}>
             <EditIcon />
           </IconButton>
           <ExpandMore

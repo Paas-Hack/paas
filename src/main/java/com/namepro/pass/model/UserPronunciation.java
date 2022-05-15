@@ -40,6 +40,6 @@ public class UserPronunciation {
     @Column(name = "UPDATED_TS")
     private LocalDateTime updatedTs;
 
-
-    //UID (FK), PRONOUNCATION, IS_PRIMARY, PHONETIC_STR,
+    @Lob
+    private byte[] data;
 }

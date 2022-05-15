@@ -28,11 +28,31 @@ export default function LoginPage() {
     };
     ApiService.login(userObj)
     	.then((res:any) => { 
+        sessionStorage.setItem('username', userObj.username+"");
         console.log('---res---', res);
+        sessionStorage.setItem('jwtToken', res.data && res.data.token);
+        getUserData(userObj.username);
+      })
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+        sessionStorage.setItem('userData', '{}') 
+      });
+  };
+  
+  
+  
+  const getUserData = (uId:any) => {
+	  ApiService.getUserData(uId)
+    	.then((res:any) => { 
+        console.log('---userData res---', res);
+        sessionStorage.setItem('userData', JSON.stringify(res.data));
+        sessionStorage.setItem('loggedInUserData', JSON.stringify(res.data));
         navigate('/home');
       })
-    	.catch((err:any)=> { console.log('---error---', err); });
-    
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+        sessionStorage.setItem('userData', '{}');
+      });
   };
 
   return (
