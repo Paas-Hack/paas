@@ -33,10 +33,15 @@ $col-yellow: rgb(241, 240, 240);
     justify-content: space-around;
     #brand{
       position: absolute;
-      height: 35px;
       top: 9px;
       left: 30px;
       overflow: hidden;
+      text-align: left;
+      img {
+      	width: 20%;
+	    top: -4px;
+	    position: relative;
+      }
     }
     .MuiTab-textColorPrimary{
       font-size: large;

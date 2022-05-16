@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReactAudioPlayer from 'react-audio-player';
 import RecordVoiceOverIcon from '@mui/icons-material/RecordVoiceOver';
 import PersonIcon from '@mui/icons-material/Person';
+import Switch from '@mui/material/Switch';
 import ApiService from './ApiService';
 
 
@@ -68,9 +69,8 @@ class ResultComponent extends Component<any> {
     getUserRecordings = (uId:any) => {
 	  ApiService.getUserRecordings(uId)
     	.then((res:any) => {
-        const blob = new Blob([res.data[0].pronunciation], { type: 'audio/mp3' });
-        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: window.URL.createObjectURL(new Blob([blob])) }),1);
-        console.log('---getUserRecordings res---', res.data, window.URL.createObjectURL(new Blob([blob])));
+        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: 'data:audio/wav;base64,'+res.data[0].data }),1);
+        console.log('---getUserRecordings res---', res.data[0]);
       })
     	.catch((err:any)=> { 
         console.log('---error---', err); 
@@ -94,12 +94,21 @@ class ResultComponent extends Component<any> {
 
   playVoice = (audioTagId:any) => {
     const audioRef = document.getElementById(audioTagId);
+    
+    if(audioTagId === 'preferredAudioRef'){
+     	// @ts-ignore
+    	audioRef.src = this.state.preferredRecordingUrl;
+    }
     // @ts-ignore
     audioRef.play();
   }
   
   navigatePage = (route:any) => {
  	 window.location.href = window.location.href.replace('/result', '/'+route);
+  }
+  
+  toggleSwitch = (switchVal: any) => {
+  	console.log('----switchVal---', switchVal);
   }
   
   
@@ -136,7 +145,9 @@ class ResultComponent extends Component<any> {
           }
           title={this.state?.userObj?.email}
           subheader={this.state?.userObj?.lanId}
-        />
+        >
+        <Switch defaultChecked color="default" onChange={this.toggleSwitch} />
+        </CardHeader>
           <div className="pronounciationDiv">
             <div className="resultOne">
               <div className="details">
@@ -151,10 +162,10 @@ class ResultComponent extends Component<any> {
                 <audio id="standardAudioRef" src={this.state.standardRecordingUrl}></audio>
               </IconButton>  }
             </div>
-          { this.state?.preferredRecording?.pronunciation && <div className="resultTwo">
+          { this.state?.preferredRecording?.data && <div className="resultTwo">
               <div className="details">
                 <strong>Preferred</strong>
-                <Typography variant="body2" color="text.secondary">{this.state?.preferredRecording?.phoneticString}</Typography>
+                <Typography variant="body2" color="text.secondary">{this.state?.preferredRecording?.phoneticString || this.state?.userObj?.fullName}</Typography>
                 <Typography variant="body2" color="text.secondary">{this.state?.userObj?.preferredPhoneticName}</Typography>
               </div>       
                {this.state?.preferredRecordingUrl && 

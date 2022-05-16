@@ -2,7 +2,7 @@ import React, { Component, useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import ProunceNamesLogo from '../images/logo.png';
 
 
 
@@ -61,7 +61,7 @@ class Header extends Component<TitleProps> {
                 <div className="wfLogoStripParent">
                     <div className="wfLogoStripChild">
                         <div id="brand">
-                            <a href="/"><img src="https://www01.wellsfargomedia.com/assets/images/css/template/homepage/homepage-horz-logo.svg" alt="Wells Fargo Home Page" role="img" /></a>
+                            <a href="/"><img src={ProunceNamesLogo} alt="PaaS Home Page" role="img" /></a>
                         </div>
                         { this.state?.showTabs && <Tabs value={this.state.tabValue} onChange={this.handleChange} aria-label="Nav Tabs">
                             <LinkTab label="Search" routename="/home" />
