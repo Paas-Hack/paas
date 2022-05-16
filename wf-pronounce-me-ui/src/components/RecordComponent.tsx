@@ -45,6 +45,7 @@ class RecordComponent extends Component<any> {
 	        ApiService.uploadUserRecordings(this.state.userObj.uid, formData)
 		    	.then((res:any) => {
 			        console.log('---getUserRecordings res---', res.data);
+                    window.location.href = window.location.href.replace('/record', '/result');
 			      })
 		    	.catch((err:any)=> { 
 		        console.log('---error---', err); 

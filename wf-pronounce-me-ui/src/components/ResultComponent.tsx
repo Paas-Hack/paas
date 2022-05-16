@@ -139,7 +139,9 @@ class ResultComponent extends Component<any> {
           }
           action= {
             this.state?.userObj && (this.state.loggedInUserData.admin || this.state.loggedInUserData.uid === this.state?.userObj.uid) 
-            && <Switch color="default" checked={this.state?.userObj?.subscribed} onChange={this.toggleSwitch} />
+           && <div>PaaS Subscription
+                <Switch color="default" checked={this.state?.userObj?.subscribed} onChange={this.toggleSwitch} />
+              </div>
           }
           title={this.state?.userObj?.email}
           subheader={this.state?.userObj?.lanId}
