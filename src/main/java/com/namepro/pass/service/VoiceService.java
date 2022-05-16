@@ -57,7 +57,7 @@ public class VoiceService {
     public void convertToWav(String word) {
         VoiceManager voiceManager = VoiceManager.getInstance();
         Voice helloVoice = voiceManager.getVoice("kevin16");
-        helloVoice.setDurationStretch((float)(2));
+        helloVoice.setDurationStretch((float)(1));
         helloVoice.setStyle("casual");
         helloVoice.allocate();
         String fileName = word.toLowerCase().replace(" ", "_");
