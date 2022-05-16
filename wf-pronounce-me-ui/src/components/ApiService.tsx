@@ -47,8 +47,8 @@ class ApiService {
 		return this.httpAxios.get("/file/standard/"+userName, { headers: this.getHeaders(), responseType: 'blob' });
 	}
 	
-	uploadUserRecordings(payload: any){
-		return this.httpAxios.post("/user/recording", payload, { headers: this.getBlobHeaders() });
+	uploadUserRecordings(userId:any, payload: any){
+		return this.httpAxios.post("/user/"+userId+"/primary/true/recording", payload, { headers: this.getBlobHeaders() });
 	}
 }
 

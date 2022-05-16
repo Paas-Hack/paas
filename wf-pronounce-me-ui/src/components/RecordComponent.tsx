@@ -39,10 +39,10 @@ class RecordComponent extends Component<any> {
         }
         const formData = new FormData();
         formData.append("username", this.state.userObj.uId);
-        formData.append("recording", file);
+        formData.append("file", file);
         formData.append("isPrimary", true+"");
 
-	        ApiService.uploadUserRecordings(formData)
+	        ApiService.uploadUserRecordings(this.state.userObj.uid, formData)
 		    	.then((res:any) => {
 			        console.log('---getUserRecordings res---', res.data);
 			      })
