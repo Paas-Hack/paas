@@ -13,7 +13,7 @@ Also we faced other issues, so keeping it in local for now.
 
 Option1: Run it as a Spring boot app in any preferred IDE    
 
-Then once the app is up, enter http://localhost:<<port number>>/paas/views/index.html  
+Then once the app is up, enter http://localhost:8080/paas/views/index.html  
 It will redirect to login page.  
 Now for existing users below use credentials, automatically it will let you run all features.  
   {  
