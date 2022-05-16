@@ -1,6 +1,7 @@
 package com.namepro.pass.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,6 +41,6 @@ public class UserPronunciation {
     @Column(name = "UPDATED_TS")
     private LocalDateTime updatedTs;
 
-    @Lob
+    @Type(type="org.hibernate.type.BinaryType")
     private byte[] data;
 }
