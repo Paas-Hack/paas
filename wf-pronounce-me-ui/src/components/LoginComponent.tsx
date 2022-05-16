@@ -34,8 +34,8 @@ export default function LoginPage() {
         getUserData(userObj.username);
       })
     	.catch((err:any)=> { 
-        console.log('---error---', err); 
-        sessionStorage.setItem('userData', '{}') 
+			console.log('---error---', err); 
+			sessionStorage.setItem('userData', '{}');
       });
   };
   
@@ -44,68 +44,68 @@ export default function LoginPage() {
   const getUserData = (uId:any) => {
 	  ApiService.getUserData(uId)
     	.then((res:any) => { 
-        console.log('---userData res---', res);
-        sessionStorage.setItem('userData', JSON.stringify(res.data));
-        sessionStorage.setItem('loggedInUserData', JSON.stringify(res.data));
-        navigate('/home');
+			console.log('---userData res---', res);
+			sessionStorage.setItem('userData', JSON.stringify(res.data));
+			sessionStorage.setItem('loggedInUserData', JSON.stringify(res.data));
+			navigate('/home');
       })
     	.catch((err:any)=> { 
-        console.log('---error---', err); 
-        sessionStorage.setItem('userData', '{}');
+			console.log('---error---', err); 
+			sessionStorage.setItem('userData', '{}');
       });
   };
 
   return (
         <Card className="loginCard">
-        <div className="loginLogoImg">
-            <img src={LoginLogo} alt="Login" role="img" />
-        </div>
-          <Box component="form" className="formFields" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Username/Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+	        <div className="loginLogoImg">
+	            <img src={LoginLogo} alt="Login" role="img" />
+	        </div>
+	          <Box component="form" className="formFields" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+	            <TextField
+	              margin="normal"
+	              required
+	              fullWidth
+	              id="email"
+	              label="Username/Email Address"
+	              name="email"
+	              autoComplete="email"
+	              autoFocus
+	            />
+	            <TextField
+	              margin="normal"
+	              required
+	              fullWidth
+	              name="password"
+	              label="Password"
+	              type="password"
+	              id="password"
+	              autoComplete="current-password"
+	            />
+	            <FormControlLabel
+	              control={<Checkbox value="remember" color="primary" />}
+	              label="Remember me"
+	            />
+	            <Button
+	              type="submit"
+	              fullWidth
+	              variant="contained"
+	              sx={{ mt: 3, mb: 2 }}
+	            >
+	              Sign In
+	            </Button>
+	            <Grid container>
+	              <Grid item>
+	                <Link href="#" variant="body2">
+	                  Forgot password?
+	                </Link>
+	              </Grid>
+	              <Grid item>
+	                <Link href="#" variant="body2">
+	                  {"Don't have an account? Sign Up"}
+	                </Link>
+	              </Grid>
+	            </Grid>
+	          </Box>
         </Card>
   );
 }

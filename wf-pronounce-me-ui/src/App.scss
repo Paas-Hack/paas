@@ -14,7 +14,12 @@ $col-yellow: rgb(241, 240, 240);
   height:calc(100% - 60px);
   .scrollContainer{
     overflow: auto;
-    min-height:100%;
+    height:calc(100% - 100px);
+    .MuiCircularProgress-root{
+      position: absolute;
+      margin:auto;
+      top: 100px;
+    }
   }
 }
 

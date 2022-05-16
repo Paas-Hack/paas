@@ -32,6 +32,7 @@ class Header extends Component<TitleProps> {
     }
 
     componentDidMount() { 	
+    	sessionStorage.clear();
         const intervalId = setInterval(()=>{
             const userData =  sessionStorage.getItem('userData') || '';
             this.setState({showTabs: !!userData });
@@ -46,8 +47,8 @@ class Header extends Component<TitleProps> {
     
 
     componentWillUnmount(){
-        clearInterval(this.state.intervalId);
         sessionStorage.clear();
+        clearInterval(this.state.intervalId); 
     }
 
     handleChange = (event: React.SyntheticEvent, newValue: number) => {
