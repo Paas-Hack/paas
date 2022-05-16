@@ -50,6 +50,10 @@ class ApiService {
 	uploadUserRecordings(userId:any, payload: any){
 		return this.httpAxios.post("/user/"+userId+"/primary/true/recording", payload, { headers: this.getBlobHeaders() });
 	}
+	
+	uploadUserSubscription(userId:any, subOpt: any){
+		return this.httpAxios.post("/user/"+userId+"/subscribe/"+subOpt, {}, { headers: this.getHeaders() });
+	}
 }
 
 export default new ApiService;

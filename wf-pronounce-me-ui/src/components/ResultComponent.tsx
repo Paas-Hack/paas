@@ -54,23 +54,16 @@ class ResultComponent extends Component<any> {
     	this.getUserRecordings(userData.uid);
     	this.getRecording(userData.fullName);
     }
-    
-    /* if (!window.AudioContext) {
-      if (!window.webkitAudioContext) {
-        alert("Your browser does not support any AudioContext and cannot play back this audio.");
-        return;
-      }
-      window.AudioContext = window.webkitAudioContext;
-    }
-    this.context = new AudioContext();    */
   }
   
   
     getUserRecordings = (uId:any) => {
 	  ApiService.getUserRecordings(uId)
     	.then((res:any) => {
-        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: 'data:audio/wav;base64,'+res.data[0].data }),1);
-        console.log('---getUserRecordings res---', res.data[0]);
+    	if(res.data && res.data[0]){
+	        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: 'data:audio/wav;base64,'+res.data[0].data }),1);
+	       }
+	     console.log('---getUserRecordings res---', res.data);
       })
     	.catch((err:any)=> { 
         console.log('---error---', err); 
@@ -94,7 +87,6 @@ class ResultComponent extends Component<any> {
 
   playVoice = (audioTagId:any) => {
     const audioRef = document.getElementById(audioTagId);
-    
     if(audioTagId === 'preferredAudioRef'){
      	// @ts-ignore
     	audioRef.src = this.state.preferredRecordingUrl;
@@ -109,30 +101,17 @@ class ResultComponent extends Component<any> {
   
   toggleSwitch = (switchVal: any) => {
   	console.log('----switchVal---', switchVal);
+  	const subVal = switchVal.target.checked;
+  	ApiService.uploadUserSubscription(this.state.userObj.uid, subVal)
+    	.then((res:any) => { 
+			console.log('-----saved subscription---');
+			setTimeout(()=>this.setState({userObj: {...this.state.userObj, ...{subscribed: subVal}} }),1);
+      })
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+      });
   }
   
-  
-  /* 
-  playByteArray = (byteArray) => {
-    const arrayBuffer = new ArrayBuffer(byteArray.length);
-    const bufferView = new Uint8Array(arrayBuffer);
-    for (i = 0; i < byteArray.length; i++) {
-      bufferView[i] = byteArray[i];
-    }
-    context.decodeAudioData(arrayBuffer, function(buffer) {
-        const buf = buffer;
-        this.play(buf);
-    });
-  }
- 
- 
-	 play = (buf: any) => {
-	    const source = this.context.createBufferSource();
-	    source.buffer = buf;
-	    source.connect(this.context.destination);
-	    source.start(0);
-	 }
-	 */
 
   render() {
     return (
@@ -143,11 +122,12 @@ class ResultComponent extends Component<any> {
               <PersonIcon />
             </Avatar>
           }
+          action= {
+            this.state?.userObj && <Switch color="default" checked={this.state?.userObj?.subscribed} onChange={this.toggleSwitch} />
+          }
           title={this.state?.userObj?.email}
           subheader={this.state?.userObj?.lanId}
-        >
-        <Switch defaultChecked color="default" onChange={this.toggleSwitch} />
-        </CardHeader>
+        />
           <div className="pronounciationDiv">
             <div className="resultOne">
               <div className="details">
@@ -155,14 +135,14 @@ class ResultComponent extends Component<any> {
                 <Typography variant="body2" color="text.secondary">{this.state?.userObj?.fullName}</Typography>
                 <Typography variant="body2" color="text.secondary">{this.state?.userObj?.standardPhoneticName}</Typography>
               </div>   
-              {this.state?.userObj?.fullName && this.state.standardRecordingUrl && 
+             {this.state?.userObj?.subscribed && this.state?.userObj?.fullName && this.state.standardRecordingUrl && 
               <IconButton color="primary" sx={{ p: '10px', color: 'black' }} aria-label="RecordVoice" 
                   onClick={()=>this.playVoice('standardAudioRef')}>
                 <RecordVoiceOverIcon />
                 <audio id="standardAudioRef" src={this.state.standardRecordingUrl}></audio>
               </IconButton>  }
             </div>
-          { this.state?.preferredRecording?.data && <div className="resultTwo">
+          { this.state?.userObj?.subscribed && this.state?.preferredRecording?.data && <div className="resultTwo">
               <div className="details">
                 <strong>Preferred</strong>
                 <Typography variant="body2" color="text.secondary">{this.state?.preferredRecording?.phoneticString || this.state?.userObj?.fullName}</Typography>
@@ -174,7 +154,6 @@ class ResultComponent extends Component<any> {
                    <RecordVoiceOverIcon />
                     <audio id="preferredAudioRef" src={this.state?.preferredRecordingUrl}></audio> 
               </IconButton>  }
-                
             </div>}
           </div>
         <CardContent>
