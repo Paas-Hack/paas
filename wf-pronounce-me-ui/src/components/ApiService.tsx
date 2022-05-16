@@ -3,11 +3,32 @@ import axios from "axios";
 
 class ApiService {
 
+
 	httpAxios:any = axios.create({
 		baseURL: "/paas",
 		headers: { "Content-Type": "application/json" }
 	});
 	
+	constructor(){
+		// Add a request interceptor
+		this.httpAxios.interceptors.request.use(function (config:any) {
+			sessionStorage.setItem('showLoader', "true");
+			return config;
+		}, function (error:any) {
+			sessionStorage.setItem('showLoader', "false");
+			return Promise.reject(error);
+		});
+
+		// Add a response interceptor
+		this.httpAxios.interceptors.response.use(function (response:any) {
+			sessionStorage.setItem('showLoader', "false");
+			return response;
+		}, function (error:any) {
+			sessionStorage.setItem('showLoader', "false");
+			return Promise.reject(error);
+		});
+	}
+
 	getHeaders(){
 		const jwtToken = sessionStorage.getItem('jwtToken') || '';
 		const headers = {
