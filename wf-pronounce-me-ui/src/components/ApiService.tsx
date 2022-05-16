@@ -5,7 +5,7 @@ class ApiService {
 
 
 	httpAxios:any = axios.create({
-		baseURL: "/paas",
+		baseURL: "http://localhost:8080/paas",
 		headers: { "Content-Type": "application/json" }
 	});
 	
@@ -74,6 +74,10 @@ class ApiService {
 	
 	uploadUserSubscription(userId:any, subOpt: any){
 		return this.httpAxios.post("/user/"+userId+"/subscribe/"+subOpt, {}, { headers: this.getHeaders() });
+	}
+
+	deleteUserRecordings(userId:any, rId: any){
+		return this.httpAxios.delete("/user/"+userId+"/recording/"+rId, {}, { headers: this.getHeaders() });
 	}
 }
 

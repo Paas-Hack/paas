@@ -58,27 +58,31 @@ class ResultComponent extends Component<any> {
   
   
     getUserRecordings = (uId:any) => {
-	  ApiService.getUserRecordings(uId)
-    	.then((res:any) => {
-    	if(res.data && res.data[0]){
-	        setTimeout(()=>this.setState({preferredRecording: res.data[0], preferredRecordingUrl: 'data:audio/wav;base64,'+res.data[0].data }),1);
-	       }
-	     console.log('---getUserRecordings res---', res.data);
-      })
-    	.catch((err:any)=> { 
-        console.log('---error---', err); 
-      });
+      ApiService.getUserRecordings(uId)
+        .then((res:any) => {
+        if(res.data && res.data[0]){
+            const rowData = res.data[res.data.length - 1];
+            setTimeout(()=>this.setState({preferredRecording: rowData,
+               preferredRecordingUrl: 'data:audio/wav;base64,'+rowData.data }),1);
+          }else {
+            setTimeout(()=>this.setState({preferredRecording: null, preferredRecordingUrl: null }),1);
+          }
+        console.log('---getUserRecordings res---', res.data);
+        })
+        .catch((err:any)=> { 
+          console.log('---error---', err); 
+        });
     };
     
     getRecording = (userName: any) => {
-	  ApiService.getRecording(userName)
-    	.then((res:any) => { 
-        console.log('---getUserRecordings res---', res);
-        setTimeout(()=>this.setState({standardRecordingUrl: window.URL.createObjectURL(new Blob([res.data])) }),1);
-      })
-    	.catch((err:any)=> { 
-        console.log('---error---', err); 
-      });
+      ApiService.getRecording(userName)
+        .then((res:any) => { 
+          console.log('---getUserRecordings res---', res);
+          setTimeout(()=>this.setState({standardRecordingUrl: window.URL.createObjectURL(new Blob([res.data])) }),1);
+        })
+        .catch((err:any)=> { 
+          console.log('---error---', err); 
+        });
     };
 
   handleExpandClick = () => {
@@ -111,6 +115,17 @@ class ResultComponent extends Component<any> {
         console.log('---error---', err); 
       });
   }
+
+  deletePrefRecording = () => {
+    ApiService.deleteUserRecordings(this.state.userObj.uid, this.state.preferredRecording.id)
+    	.then((res:any) => { 
+        console.log('-----saved subscription---');
+        this.getUserRecordings(this.state.userObj.uid);
+      })
+    	.catch((err:any)=> { 
+        console.log('---error---', err); 
+      });
+  }
   
 
   render() {
@@ -123,7 +138,8 @@ class ResultComponent extends Component<any> {
             </Avatar>
           }
           action= {
-            this.state?.userObj && <Switch color="default" checked={this.state?.userObj?.subscribed} onChange={this.toggleSwitch} />
+            this.state?.userObj && (this.state.loggedInUserData.admin || this.state.loggedInUserData.uid === this.state?.userObj.uid) 
+            && <Switch color="default" checked={this.state?.userObj?.subscribed} onChange={this.toggleSwitch} />
           }
           title={this.state?.userObj?.email}
           subheader={this.state?.userObj?.lanId}
@@ -164,12 +180,14 @@ class ResultComponent extends Component<any> {
           <Typography variant="body2" color="text.secondary"><strong>Phone Number  </strong>{this.state?.userObj?.phone}</Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="Delete Pronunciation">
+          { this.state?.userObj && this.state.loggedInUserData.admin 
+             && <IconButton aria-label="Delete Pronunciation" onClick={()=>this.deletePrefRecording()}>
             <DeleteIcon />
-          </IconButton>
-          <IconButton aria-label="Edit Pronunciation" onClick={()=>this.navigatePage('record')}>
+          </IconButton> }
+          { this.state?.userObj && (this.state.loggedInUserData.admin || this.state.loggedInUserData.uid === this.state?.userObj.uid) 
+           && <IconButton aria-label="Edit Pronunciation" onClick={()=>this.navigatePage('record')}>
             <EditIcon />
-          </IconButton>
+          </IconButton> }
           <ExpandMore
             expand={this.state?.expanded}
             onClick={this.handleExpandClick}
