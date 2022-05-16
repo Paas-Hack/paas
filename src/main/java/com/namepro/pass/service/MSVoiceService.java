@@ -66,6 +66,7 @@ public class MSVoiceService {
     public String speechToText() throws InterruptedException, ExecutionException {
         String text = "";
         SpeechConfig speechConfig = getSpeechConfig();
+        //AudioConfig audioInput = AudioConfig.fromWavFileInput("YourAudioFile.wav");
         AudioConfig audioConfig = AudioConfig.fromDefaultMicrophoneInput();
         SpeechRecognizer speechRecognizer = new SpeechRecognizer(speechConfig, audioConfig);
 
