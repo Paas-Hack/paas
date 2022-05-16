@@ -142,27 +142,27 @@ public class JwtUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not found with username: " + name);
 		}
 		List<UserPronunciation> userPronunciations = userPronunciationRepository.findAllByUser(user.get());
-		userPronunciations.stream().forEach(p -> {
-			p.setPhoneticString(getPhoneticString(p.getUser().getFullName())); 
-		});
+//		userPronunciations.stream().forEach(p -> {
+//			p.setPhoneticString(getPhoneticString(p.getUser().getFullName()));
+//		});
 		return userPronunciations;
 	}
 	
 	
-	private String getPhoneticString(String name) {
-		String res= "";
-		try {
-			String command = "python "+PYTHON_SCRIPT_PATH+"phonetic.py";
-			Process p = Runtime.getRuntime().exec(command);
-			CompletableFuture<Process> future = p.onExit();
-			future.get();
-			log.info(":::::getPhoneticString::::{}", new String(p.getInputStream().readAllBytes()));
-			res = new String(Files.readAllBytes(Paths.get("output.txt")));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
+//	private String getPhoneticString(String name) {
+//		String res= "";
+//		try {
+//			String command = "python "+PYTHON_SCRIPT_PATH+"phonetic.py";
+//			Process p = Runtime.getRuntime().exec(command);
+//			CompletableFuture<Process> future = p.onExit();
+//			future.get();
+//			log.info(":::::getPhoneticString::::{}", new String(p.getInputStream().readAllBytes()));
+//			res = new String(Files.readAllBytes(Paths.get("output.txt")));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return res;
+//	}
 
 	public void deletePronunciation(String userId, long id) {
 
