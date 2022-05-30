@@ -79,6 +79,11 @@ class ApiService {
 	deleteUserRecordings(userId:any, rId: any){
 		return this.httpAxios.delete("/user/"+userId+"/recording/"+rId, {}, { headers: this.getHeaders() });
 	}
+
+
+	getPhoneticKey(payload: any){
+		return this.httpAxios.post("https://mynameis.raceequalitymatters.com/api/resolve", payload, { headers: {'Content-Type': 'application/json'} });
+	}
 }
 
 export default new ApiService;

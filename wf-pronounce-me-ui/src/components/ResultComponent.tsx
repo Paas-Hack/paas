@@ -46,6 +46,7 @@ class ResultComponent extends Component<any> {
   }
 
   componentDidMount() { 	
+    console.log('-----', new Date());
   	const loggedInUserData =  JSON.parse(sessionStorage.getItem('loggedInUserData') || '{}');
     const userData =  JSON.parse(sessionStorage.getItem('userData') || '{}');
     setTimeout(()=>this.setState({userObj: userData, loggedInUserData: loggedInUserData }),1);
@@ -53,10 +54,23 @@ class ResultComponent extends Component<any> {
     if(userData.uid){
     	this.getUserRecordings(userData.uid);
     	this.getRecording(userData.fullName);
-    }
+      this.getPhoneticKey(userData.fullName);
+    }   
   }
   
-  
+  getPhoneticKey(name:any){
+    ApiService.getPhoneticKey({name: name})
+    .then((res:any) => {
+      const userObj = this.state.userObj;
+      userObj.standardPhoneticName = res.data && res.data[0] && res.data[0].phonetic;
+      setTimeout(()=>this.setState({userObj: userObj }),1);
+      console.log('---getPhoneticKey res---', res.data);
+    })
+    .catch((err:any)=> { 
+      console.log('---error---', err); 
+    });
+
+  }
     getUserRecordings = (uId:any) => {
       ApiService.getUserRecordings(uId)
         .then((res:any) => {
