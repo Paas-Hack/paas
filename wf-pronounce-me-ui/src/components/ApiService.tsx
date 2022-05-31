@@ -81,7 +81,7 @@ class ApiService {
 	}
 
 
-	getPhoneticKey(payload: any){
+	getPhoneticKey(payload: any){  
 		return this.httpAxios.post("https://mynameis.raceequalitymatters.com/api/resolve", payload, { headers: {'Content-Type': 'application/json'} });
 	}
 }
